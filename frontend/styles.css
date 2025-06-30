@@ -1,0 +1,4 @@
+#audioContainer {
+  display: flex;
+  flex-direction: column;
+}
