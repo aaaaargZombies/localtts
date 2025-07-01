@@ -7,6 +7,11 @@ const createAudio = () => {
   const queue = [];
   let idle = true;
 
+  /**
+   * Limit the amount of audio we attempt to create in one go.
+   * The user can request as much as they like without overwhelming
+   * the cpu.
+   */
   const performEffect = () => {
     idle = false;
     if (queue.length === 0) {
