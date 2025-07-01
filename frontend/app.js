@@ -3,40 +3,50 @@ const txtinput = document.getElementById("text");
 const btnsubmit = document.getElementById("submit");
 const audioContainer = document.getElementById("audioContainer");
 
-const queue = [];
+const createAudio = () => {
+  const queue = [];
+  let idle = true;
 
-const performEffect = () => {
-  console.log("PERFORM:", Date.now());
-  if (queue.length === 0) {
-    setTimeout(performEffect, 500);
-  } else {
-    console.log("Stuff in the queue");
-    const txt = queue.shift();
-    logentry(txt);
-    const text = encodeURI(txt);
-    const audio = new Audio(`http://localhost:5000/?text=${text}`);
-    audio.setAttribute("controls", "");
-    audioContainer.appendChild(audio);
-    audio.addEventListener("loadeddata", () => {
+  const performEffect = () => {
+    idle = false;
+    if (queue.length === 0) {
+      idle = true;
+    } else {
+      const txt = queue.shift();
+      const text = encodeURI(txt);
+      const audio = new Audio(`http://localhost:5000/?text=${text}`);
+      audio.setAttribute("controls", "");
+      audioContainer.appendChild(audio);
+      audio.addEventListener("loadeddata", () => {
+        performEffect();
+      });
+    }
+  };
+
+  const offer = (t) => {
+    logentry(t);
+    queue.push(t);
+    if (idle) {
       performEffect();
-    });
-  }
+    }
+  };
+
+  return offer;
 };
 
-performEffect();
+const offer = createAudio();
 
 function submit() {
-  console.log("Submitting");
   const texts = txtinput.value.split("\n").filter(Boolean);
   texts.forEach((text) => {
-    queue.push(text);
+    offer(text);
   });
   txtinput.value = "";
 }
 
 function logentry(input) {
   const timestamp = new Date().toLocaleTimeString();
-  txtlog.value += "\n" + timestamp + " : " + input + "\n---";
+  txtlog.value += timestamp + " : " + input + "\n\n";
 }
 
 btnsubmit.addEventListener("click", () => {
@@ -49,5 +59,4 @@ txtinput.addEventListener("keyup", (event) => {
   }
 });
 
-txtlog.value += "\n" + "---";
 txtinput.focus();
