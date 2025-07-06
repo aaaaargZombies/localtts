@@ -5,6 +5,7 @@ const audioContainer = document.getElementById("audioContainer");
 
 const createAudio = () => {
   const queue = [];
+  const audioElements = [];
   let idle = true;
 
   /**
@@ -34,6 +35,22 @@ const createAudio = () => {
     if (idle) {
       performEffect();
     }
+  };
+
+  const play = (index) => {
+    const audio = audioElements[index];
+    if (audio) {
+      audio.play();
+    } else {
+      console.log("no audio at that address");
+    }
+  };
+
+  const stop = () => {
+    audioElements.forEach((audio) => {
+      audio.pause();
+      audio.currentTime = 0;
+    });
   };
 
   return offer;

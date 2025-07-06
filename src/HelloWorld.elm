@@ -1,4 +1,4 @@
-module HelloWorld exposing (helloWorld)
+module HelloWorld exposing (view)
 
 import Html exposing (Html, a, button, code, div, h1, p, text)
 import Html.Attributes exposing (href, style)
@@ -6,10 +6,10 @@ import Html.Events exposing (onClick)
 import Msg exposing (Msg(..))
 
 
-helloWorld : Int -> Html Msg
-helloWorld model =
+view : Int -> Html Msg
+view model =
     div []
-        [ h1 [] [ text "Hello, Vite + Elm!" ]
+        [ h1 [] [ text "Hello, from Vite + Elm!" ]
         , p []
             [ a [ href "https://vitejs.dev/guide/features.html" ] [ text "Vite Documentation" ]
             , text " | "
